@@ -1,0 +1,407 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[cp1251]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage[russian]{babel}
+\usepackage{hyperref}
+\usepackage[footnotes,oglav,spisok,boldsect,eqwhole,kursrab,remarks,hyperprint]{project}
+
+\begin{document}
+
+\begin{titlepage}
+  \begin{center}
+    \large
+ 
+    Московский физико-технический институт (национальный исследовательский университет) (МФТИ)
+    \vspace{0.25cm}
+     
+    Физтех-школа радиотехники и компьютерных технологий
+     
+    Кафедра интегрированных киберсистем
+    \vfill
+     
+     
+    Галкин Всеволод Александрович
+    \vfill
+ 
+    \textsc{Методы анализа экстремальных событий}\\[5mm]
+     
+    {\LARGE Домашняя работа по \\
+      практическим задачам}
+  \bigskip
+     
+   1 курс магистратуры, группа М01-006б
+\end{center}
+\vfill
+ 
+\newlength{\ML}
+\settowidth{\ML}{«\underline{\hspace{0.7cm}}» \underline{\hspace{2cm}}}
+\hfill\begin{minipage}{0.4\textwidth}
+  Преподаватель\\
+  \underline{\hspace{\ML}} Н.\,М.~Маркович\\
+  «\underline{\hspace{0.7cm}}» \underline{\hspace{2cm}} 2020 г.
+\end{minipage}%
+\bigskip
+ 
+\hfill\begin{minipage}{0.4\textwidth}
+\end{minipage}%
+\vfill
+ 
+\begin{center}
+  Москва, 2020 г.
+\end{center}
+\end{titlepage}
+
+\section{Задача №1} \label{sec: Task1}
+
+\textbf{Постановка:} \newline
+Сгенерировать выборку из распределения Фреше, которое имеет функцию распределения
+\begin{equation} \label{eq: Frechet dist}
+F(x) = \exp{-(\gamma x)^{\frac{1}{\gamma}} 1 \{x > 0\}}
+\end{equation}
+и параметром~$\gamma = 1.5$. Размер выборки~$n = 100$. 
+
+
+\textbf{Решение:}
+Для сэмплирования из распределения Фреше, воспользуемся \textbf{методом обратной функции}, для этого
+\begin{enumerate}
+\item сэмплируем из равномерного распределения~$U[0,\,1]$;
+\item находим значения обратной функции к функции распределения Фреше
+	\begin{equation*}
+	X_i  =\frac{1}{\gamma} \left( - \log{U_i} \right)^{-\gamma}.
+	\end{equation*}
+\end{enumerate}
+
+По теореме об обратной функции к функции распределения, случайная величина~$X$ распределена по закону Фреше~(\ref{eq: Frechet dist}).
+
+\begin{figure}[h!]
+\begin{center}
+\begin{minipage}[h!]{0.3\linewidth}
+\includegraphics[width=1\linewidth]{FrechetDist}
+\caption{Распределение сгенерированных данных из распределение Фреше}
+\label{ris: Frechet dist} 
+\end{minipage}
+\hfill
+\begin{minipage}[h!]{0.3\linewidth}
+\includegraphics[width=1\linewidth]{Frechet_pdfwik}
+\caption{Функция плотности вероятности распределения Фреше. Графики взяты из Википедии}
+\label{ris: Frechet pdf}
+\end{minipage}
+\end{center}
+\end{figure}
+
+
+\textbf{Выводы:}
+
+Полученная гистограмма частоты появления случайной величины из распределения Фреше "соответствует" теоретической плотности (см. рис.~\ref{ris: Frechet pdf}). Для качественного оценивания  необходимо проверить тот или иной \textbf{критерий согласия}, однако этот эксперимент выходит за рамки данной работы.
+
+
+\section{Задача №2} \label{sec: Task2}
+
+\textbf{Постановка:}
+Вычислить статистику 
+\begin{equation*}
+R_n(p) = \frac{M_n(p)}{S_n(p)},\, n \geq 1,\, p > 0,
+\end{equation*}
+где 
+\begin{equation*}
+M_n(p) = \text{max} \left( |X_1|^p,\, \ldots,\, |X_n|^p \right),\, S_n(p) = |X_1|^p + \ldots + |X_n|^p.
+\end{equation*}
+
+В представленных формулах~${X_i}_{i=1}^n$ независимая выборка из некоторого распределения.
+
+Требуется построить зависимость статистики~$R_n(p)$ при фиксированной выборке (размер~$n$ большой) и значении параметра~$p$ от объема~$m$ выбранной подвыборки ($m < n$) и сделать выводы относительно количества конечных моментов распределения.
+
+\textbf{Решение:}
+Для реализации поставленной задачи и построения графика зависимости сгенерируем выборки из распределения Фреше размером~$n = 50\,000$, для параметра~$m$ зададим равномерную сетку из диапазона~$[10,\,n]$ с числом узлов~$500$ для различных значений параметра~$p = \{1, 2, 3, 4\}$. Графики зависимости представлен на~\ref{ris:Statdependencep}.
+
+\begin{figure}[h]
+\center{\includegraphics[width=1\linewidth]{Statdependencep}}
+\caption{Графики зависимости статистики~$R_n(p)$ от объема выборки при различных значениях параметра~$p$}
+\label{ris:Statdependencep}
+\end{figure}
+
+\textbf{Вывод:}
+Для распределения~$F(x)$ момент степени~$p$ существует, если оценка~$R_n(p)$ сходится к~$0$ при увеличении размера выборки~$n$. И момент степени~$p$ не существует, если расхождение оценки~$R_n(p)$ с нулем велико.
+
+
+Из представленных графиков можно сделать вывод, что у распределения Фреше со значением параметра~$\gamma = 1.5$ \textbf{не существует даже первого момента}.
+
+
+\clearpage
+\newpage
+\section{Задача №3} \label{sec: Task3}
+
+В данном разделе проведем построение графика QQ-plot, целью которого является исследование принадлежности выборки к распределению. Сам график разброса имеет следующий вид:
+\begin{equation*}
+\{ \left( X_{k},\, F^{-1} \left(\frac{n - k + 1}{n + 1}\right) \right) : k = 1,\, \ldots,\, n \},
+\end{equation*}
+где~$X_{(1)} \geq \ldots \geq X_{(n)}$, а~$F^{-1}$ -- обратная функции к некоторой функции распределения~$F(x)$.
+
+Статистическая выборка~$X$ распределена по закону с функцией~$F(x)$, если QQ-plot близок к линейной функции. Так же следует отметить, что на форму данного графика влияют аномальные выбросы, поэтому при построении нужно учитывать отсев экстремальных данных.
+
+На данном этапе работы проведем следующий эксперимент. Сгенерируем выборку из распределения Фреше размером~$1000$ экземпляров и проведем построение QQ-plot графика с отсевом~$0,\, 25,\, 100,\, 500$ максимальных реализаций.
+
+
+Результаты моделирования приведены на рис.~\ref{ris: QQplot}. Можно заметить, что при увеличении числа отброшенных максимальных экземпляров график становится похожим на экспоненциальный, а не на линейный (\textbf{не понимаю почему так происходит, наоборот должен быть более линейным}). 
+
+\begin{figure}[h!]
+\begin{minipage}[h]{0.37\linewidth}
+\center{\includegraphics[width=1\linewidth]{QQ0}} a) \\
+\end{minipage}
+\hfill
+\begin{minipage}[h]{0.37\linewidth}
+\center{\includegraphics[width=1\linewidth]{QQ10}} \\b)
+\end{minipage}
+\vfill
+\begin{minipage}[h]{0.37\linewidth}
+\center{\includegraphics[width=1\linewidth]{QQ25}} c) \\
+\end{minipage}
+\hfill
+\begin{minipage}[h]{0.37\linewidth}
+\center{\includegraphics[width=1\linewidth]{QQ50}} d) \\
+\end{minipage}
+\caption{QQ-plot с отсевом максимальных: a) $0$ экземпляров, b) $25$ экземпляров, c) $100$ экземпляров, d) $500$ экземпляров.}
+\label{ris: QQplot}
+\end{figure}
+
+
+Можно заметить, что разброс точек при исключении большего числа экстремальных экземпляров выборки стремится к линейной функции. Из этого следует вывод, что выборка получена из распределения Фреше. 
+
+Так же следует отметить, что QQ-plot не обязан располагаться в квадрате~$[0,\,1] \times [0,\, 1]$ при условии отсутствия дополнительной нормировки разброса точек. График разброса QQ-plot строится по принципу
+\begin{equation*}
+\{ \left( X_{k},\, F^{-1} \left(\frac{n - k + 1}{n + 1}\right) \right) : k = 1,\, \ldots,\, n \}
+\end{equation*}
+и это график не обязан располагаться внутри единичного квадрата по следующим причинам:
+\begin{enumerate}
+\item Используемая статистическая выборка~$X = \{X_{k}\}_{k = 1}^n$ может не принадлежать диапазону~$[0,\,1]$;
+\item Область определения функции распределения~$F(x)$, а следовательно и область значения функции~$F^{-1}(x)$ не обязана быть из диапазона~$[0,\, 1]$.
+\end{enumerate}
+
+В силу этих двух причин QQ-plot в общем случае не принадлежит единичному квадрату.
+
+\clearpage
+\newpage
+\section{Задача №4} \label{sec: Task4}
+
+Имея статистическую выборку~$X^{n}= {X_1,\, \ldots,\, X_n}$. В данном задании необходимо получить функцию the empirical mean excess, которая имеет следующий вид:
+\begin{equation*}
+e_n (u) = \frac{\sum_{i = 1}^n (X_i - u) I\{X_i > u\}}{\sum_{i=1}^{n} I\{X_i > u\}},
+\end{equation*}
+где~$I$ -- индикаторная функция. 
+
+Возьмем выборку, представленную в разделе~\ref{sec: Task1} из распределения Фреше, размер выборки~$n = 1000$ экземпляров. Выборка независима и экземпляры одинаково распределены. Для построения функции~$e_n (u)$ зададим аргумент~$u$ из диапазона~$[0,\, 1000]$ с размером шага~$2$. Результаты представлены на графике~\ref{ris: en (u)}.
+
+
+\begin{figure}[h]
+\center{\includegraphics[width=0.7\linewidth]{DependenceEnu}}
+\caption{Функция~$e_n (u)$}
+\label{ris: en (u)}
+\end{figure}
+
+
+Для анализа результатов воспользуемся следующим свойством, если при больших значениях аргумента~$u$:
+\begin{enumerate}
+\item $e_n (u)$ уходит на бесконечность, то распределение с тяжелыми хвостами;
+\item $e_n (u)$ линейная функция, то распределение Парето;
+\item $e_n (u)$ постоянная, то экспоненциальное распределение с интенсивность~$\lambda$;
+\item $e_n (u)$ стремится к нулю, то распределение с легкими хвостами.
+\end{enumerate}
+
+
+На представленном графике~\ref{ris: en (u)} функция~$e_n (u)$ уходит на бесконечность, что свидетельствует о том, что распределение с тяжелыми хвостами.
+
+\clearpage
+\newpage
+\section{Задача №5} \label{sec: Task5}
+
+Для исследования свойств полученной выборки и оцениванию тяжести его хвоста, получим следующие статистические оценки:
+\begin{enumerate}
+\item Hill estimator;
+\begin{equation*}
+\gamma^{H}_{n,\, k} = \frac{1}{k} \sum_{i = 1}^{k} \sum_{i = 1}^{k} \log{X_{(n - i + 1)}} - \log{X_{(n - k)}},\,\, k = 1,\, \ldots,\, n - 1.
+\end{equation*}
+\item Ratio estimator;
+\begin{equation*}
+a_n = a_n(x_n) = \sum_{i = 1}^n \log{\frac{X_i}{x_n}} I\{ X_i > x_n \} / \sum_{i = 1}^n I\{X_i > x_n\},\,\, X_{(1)} < x_n < X_{x(n)}.
+\end{equation*}
+\item Moment estimator;
+\begin{equation*}
+\gamma^{M}_{n, k} = \gamma^{H}_{n,\, k} + 1 - 0.5 \left( 1 - (\gamma^{H}_{n,\, k})^2/ S_{n, k} \right),
+\end{equation*}
+где
+\begin{equation*}
+S_{n, k} = \frac{1}{k} \sum_{i = 1}^{k} \left( \log{X_{(x - i + 1)}} - \log{X_{(n - k)}} \right)^2.
+\end{equation*}
+\item UH estimator;
+\begin{equation*}
+\gamma^{UH}_{n, k} = \frac{1}{k} \sum_{i = 1}^k \log{UH_i}  - \log{UH_{k + 1}},\, UH_i = X_{(n - i)} \gamma^{H}_{n,\, k}.
+\end{equation*}
+\item Pickands estimator;
+\begin{equation*}
+\gamma_{k, n}^P = \frac{1}{\log{2}} \log{\frac{X_{(n - k + 1)} - X_{(n - 2k + 1)}}{X_{(n - 2k + 1)} - X_{(n - 4k + 1)}}},\, k \leq \frac{n}{4}.
+\end{equation*}
+\end{enumerate}
+
+Полученные оценки приведены на рис.~\ref{ris: Estimators}.
+
+При проведении экспериментов использовалась выборка из распределения Фреше объемом~$1\,000$ экземпляров. 
+
+Следует отметить, что поведение оценки Хилла демонстрирует стабильность при~$k \in [25,\, 1000]$. Положительность оценки Хилла указывает на наличие тяжелых хвостов. Оценка Хилла стабилизируется в окрестности значения~$2$, следовательно из критерия~$\beta < \frac{1}{\gamma}$ можно сделать вывод о конечности моментов. В нашем случае~$\beta < \frac{1}{2}$, следовательно распределение имеет только нулевой конечный момент. Следует отметить, что и другие статистические оценки параметра~$\gamma$ стабилизируются в окрестности значения~$2$.
+
+\begin{figure}[h!]
+\begin{minipage}[h]{0.47\linewidth}
+\center{\includegraphics[width=1\linewidth]{HillEstimator}} a) \\
+\end{minipage}
+\hfill
+\begin{minipage}[h]{0.47\linewidth}
+\center{\includegraphics[width=1\linewidth]{Ratiostimator}} b) \\
+\end{minipage}
+\vfill
+\begin{minipage}[h]{0.47\linewidth}
+\center{\includegraphics[width=1\linewidth]{MomentEstimator}} c) \\
+\end{minipage}
+\hfill
+\begin{minipage}[h]{0.47\linewidth}
+\center{\includegraphics[width=1\linewidth]{PickandsEstimator}} d) \\
+\end{minipage}
+\vfill
+\begin{minipage}[h]{0.47\linewidth}
+\center{\includegraphics[width=1\linewidth]{UHEstimator}} e) \\
+\end{minipage}
+\caption{Построенные оценки: a) Hill estimator, b) Ratio estimator, c) Moment estimator, d) Pickands estimator e) UH estimator.}
+\label{ris: Estimators}
+\end{figure}
+
+\clearpage
+\newpage
+\section{Задача №7} \label{sec: Task7}
+
+В данной задаче требуется сгенерировать выборку из распределения с регулярноменяющимися хвостами, а именно:
+\begin{enumerate}
+\item $1 - F(x) = P \{X > x\} = x^{-\frac{1}{\gamma}} l(x)$, где~$l(x) = 1,\, 2$ и~$\gamma = 0.5$.
+\item Распределение Вейбула~$1 - F(x) = e^{-c x^{1 / \gamma }}$, где~$(c,\, \gamma) = \{ (1,\,2),\, (2,\,3)\}$.
+\end{enumerate}
+
+Вычислить оценки Хилла для распределений, изучить влияние функции~$l(x)$ на оценку и сравнить полученные оценки с действительными значениями параметра~$\gamma$.
+
+Для создания статистических выборок воспользуемся методом обратной функции, для этого к функциями распределения
+\begin{enumerate}
+\item $1 - x^{-\frac{1}{\gamma}} l(x)$;
+\item $1 - e^{-c x^{1 / \gamma }}$
+\end{enumerate}
+найдем обратные функции. 
+
+Такими являются функции (с учетом того, что~$l(x) = \tilde{C} = \text{const}$):
+\begin{enumerate}
+\item Для первой функции распределения
+\begin{equation*}
+x = \left( \frac{\tilde{C}}{1 - y} \right)^{\gamma}.
+\end{equation*}
+
+\item Для второй функции распределения
+\begin{equation*}
+x = \left( -\frac{1}{c} \log{(1 - y)} \right)^{\gamma}.
+\end{equation*}
+\end{enumerate}
+
+Для создания выборки, вместо~$y$ подставим выборку, распределенную по равномерному закону из диапазона~$U [0,\, 1)$.
+
+\begin{figure}[h!]
+\begin{minipage}[h]{0.47\linewidth}
+\center{\includegraphics[width=1\linewidth]{RVDl1}} a) \\
+\end{minipage}
+\hfill
+\begin{minipage}[h]{0.47\linewidth}
+\center{\includegraphics[width=1\linewidth]{RVDl2}} b) \\
+\end{minipage}
+\vfill
+\begin{minipage}[h]{0.47\linewidth}
+\center{\includegraphics[width=1\linewidth]{Weibull12}} c) \\
+\end{minipage}
+\hfill
+\begin{minipage}[h]{0.47\linewidth}
+\center{\includegraphics[width=1\linewidth]{Weibull23}} d) \\
+\end{minipage}
+\caption{Построенные распределения: a) RVD~$l(x) = 1,\, \gamma = 0.5$, b) RVD~$l(x) = 2,\, \gamma = 0.5$, c) Weibull $c = 1,\, \gamma = 2$, d) Weibull $c = 2,\, \gamma = 3$.}
+\label{ris: RVD plot}
+\end{figure}
+
+\clearpage
+\newpage
+Построим оценки Хилла для полученных распределений.
+\begin{figure}[h!]
+\begin{minipage}[h]{0.47\linewidth}
+\center{\includegraphics[width=1\linewidth]{RVD1Hill}} a) \\
+\end{minipage}
+\hfill
+\begin{minipage}[h]{0.47\linewidth}
+\center{\includegraphics[width=1\linewidth]{RVD2Hill}} b) \\
+\end{minipage}
+\vfill
+\begin{minipage}[h]{0.47\linewidth}
+\center{\includegraphics[width=1\linewidth]{Weibull12Hill}} c) \\
+\end{minipage}
+\hfill
+\begin{minipage}[h]{0.47\linewidth}
+\center{\includegraphics[width=1\linewidth]{Weibull23Hill}} d) \\
+\end{minipage}
+\caption{Оценки Хилла для распределений: a) RVD~$l(x) = 1,\, \gamma = 0.5$, b) RVD~$l(x) = 2,\, \gamma = 0.5$, c) Weibull $c = 1,\, \gamma = 2$, d) Weibull $c = 2,\, \gamma = 3$.}
+\label{ris: RVD Hills}
+\end{figure}
+
+Из представленных графиков можно заметить следующую зависимость, чем больше хвостовая функция (см. графики для выборки из RVD) тем медленнее сходится оценка Хилла, а для выборки из распределения Вейбула оценка при увеличении параметра~$k$ и вовсе расходится.
+
+
+\clearpage
+\newpage
+\section{Задача №8} \label{sec: Task7}
+Пусть имеется статистическая выборка~$X^n = \{X_1,\, \ldots,\, X_n\}$, необходимо разделить ее на~$l$ групп~$V_1,\, \ldots,\, V_l$. В каждой группе содержится~$m$ независимых, одинаково распределенных экземпляров. 
+
+Требуется вычислить групповую оценку хвостового индекса
+\begin{equation*}
+z_l = \frac{1}{l} \sum_{i = 1}^l k_{l j} = \frac{\tilde{\alpha}}{\tilde{\alpha} + 1} = \frac{1}{1 + \tilde{\gamma}} \rightarrow \tilde{\gamma} = \frac{1}{z_l} - 1,
+\end{equation*}
+где 
+\begin{equation*}
+k_{l i} = \frac{M^{(2)}_{l i}}{M^{(1)}_{l i}},\, M^{(1)}_{l i} = \text{max} \{ X_j: X_j \in V_i \},
+\end{equation*}
+а~$M^{(2)}_{l i}$ второй наибольший элемент из группы~$V_i$. 
+
+Необходимо построить график~$\{(m,\, \frac{1}{z_m} - 1)\}$, где~$m = 10,\, 11,\, \ldots$ вместе с доверительным интервалом. Параметр~$n$ взять из $\{150,\, 500,\, 1000\}$.
+
+Так же требуется построить доверительный интервал для оценки параметра~$\gamma$ с уровнем~$\alpha = 0.95$. Границы доверительного интервала вычисляются как
+\begin{equation*}
+\gamma_{1,\,2} = \left( \overline{k} - \frac{\pm 1.96 \sqrt{A}}{l} \right)^{-1} - 1,
+\end{equation*}
+где~$\overline{k} = \frac{1}{l} \sum_{i = 1}^l k_{li},\, A = \sum_{i = 1}^l k_{l i}^2 - \overline{k}$.
+
+Для реализации эксперимента выберем размер выборок и их количество таким образом, чтобы строго выполнялось условие~$n = l m$, где~$n$- общий размер выборки,~$m$ -- количество экземпляров в группе, а~$l$-- количество групп. В качестве базовой выборки возьмем статистическую выборку из распределения с регулярноменяющимся хвостом~$F(x) = 1 - x^{-\frac{1}{\gamma}} l(x)$ с параметрами~$l(x) = 1,\, \gamma = 0.5$.
+
+Результаты моделирования для выборок различного объема приведены на~\ref{ris: Group estimate}.
+
+\clearpage
+\newpage
+\begin{figure}[h!]
+\begin{minipage}[h]{0.47\linewidth}
+\center{\includegraphics[width=1\linewidth]{GrouptEstimator150}} a) \\
+\end{minipage}
+\hfill
+\begin{minipage}[h]{0.47\linewidth}
+\center{\includegraphics[width=1\linewidth]{GrouptEstimator500}} b) \\
+\end{minipage}
+\vfill
+\begin{minipage}[h]{0.47\linewidth}
+\center{\includegraphics[width=1\linewidth]{GrouptEstimator1000}} c) \\
+\end{minipage}
+\caption{Групповые оценки Хилла для выборки из распределения Фреше объемом: a) $n = 150$ b) $n = 500$ , c) $n = 1000$.}
+\label{ris: Group estimate}
+\end{figure}
+
+
+Для начала оценим возможные знаки величины~$A$. По определению~$A = \sum_{i = 1}^l k_{l i}^2 - \overline{k}$, где~$k_{l i} = \frac{M^{(2)}_{l i}}{M^{(1)}_{l i}}$. Предположим, что элементы выборки положительные и меньше~$1$. Отсюда величина~$k_{i l}$ так же будет положительной и меньше чем~$1$. В таком случае сумма квадратов чисел меньших~$1$ будет меньше, чем просто сумма чисел. Таким образом, возможно такая ситуация, что величина~$A$  будет отрицательной. Для вычисления границ доверительного интервала величина~$A$ входит под знаком квадратного корня, но может иметь отрицательное значение. Это ведет к возникновению комплексных корней, что неестественно для границ доверительных интервалов.
+
+
+Для распределения с регулярноменяющимся хвостом справедлива сходимость оценки при условии~$l = m$. Данное соотношение и наблюдается на представленных результатах, оценка сходится к истинной и доверительный интервал сужается.
+
+\end{document} 

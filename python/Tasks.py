@@ -423,11 +423,12 @@ def GEConfidenceInterval(groups):
   conf_interval = np.empty((2, ), dtype = np.float32)
   k_ol = (1./n)*np.sum(kl)
   A = np.sum(kl**2) - k_ol
-  conf_interval[0] = (k_ol - ((1.96*np.sqrt(A)))/n)**(-1) - 1
-  conf_interval[1] = (k_ol - ((-1.96*np.sqrt(A)))/n)**(-1) - 1
+  lst = [(k_ol - ((1.96*np.sqrt(A)))/n)**(-1) - 1,\
+         (k_ol - ((-1.96*np.sqrt(A)))/n)**(-1) - 1]
+  conf_interval[0] = min(lst)
+  conf_interval[1] = max(lst)
   return conf_interval
-
-def plotGroupEstimator(samples):
+  
   """
   Построение групповой оценкци и доверительного интервала
   """

@@ -488,8 +488,8 @@ PlotDistribution(Weibull_samples, 'Weibull, c = 2, gamma = 3', bins = 50) # по
 
 plotHillEstimator(Weibull_samples) # построение оценки Хилла
 #%%
-num_sample = 1000 # количество сэмплов выборки
-gamma = 1.5 # параметр распределения Фреше
-FrechetSamples = FrechetDistribution(num_sample, gamma) # геренация выборки
-
-plotGroupEstimator(FrechetSamples) # построение групповой оценки
+num_sample = 500 # количество сэмплов выборки
+gamma = 0.5 # параметр распределения Фреше
+C = 1
+RVD_samples = RVD(num_sample, C, gamma) # распределение с регулярно мен. хвостами
+plotGroupEstimator(RVD_samples) # построение групповой оценки
